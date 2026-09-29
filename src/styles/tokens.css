@@ -1,0 +1,62 @@
+/* Design tokens. Theme resolution:
+   - default: follows prefers-color-scheme
+   - [data-theme="light" | "dark"] on <html>: user override */
+
+:root {
+  --blue: #4285f4;
+  --red: #ea4335;
+  --yellow: #fbbc04;
+  --green: #34a853;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --gutter: clamp(16px, 3vw, 32px);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 160ms;
+  --dur: 280ms;
+
+  --font: 'Noto Sans TC', system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+
+  /* light */
+  --bg: #f6f7fb;
+  --bg-2: #eceff5;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-strong: #ffffff;
+  --border: rgba(32, 33, 36, 0.1);
+  --text: #1f2328;
+  --text-muted: #5f6368;
+  --shadow: 0 10px 30px rgba(32, 33, 36, 0.08), 0 2px 6px rgba(32, 33, 36, 0.06);
+  --glow-alpha: 0.18;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0d0f14;
+    --bg-2: #151923;
+    --surface: rgba(28, 32, 42, 0.72);
+    --surface-strong: #1c202a;
+    --border: rgba(255, 255, 255, 0.09);
+    --text: #eef0f4;
+    --text-muted: #a0a6b1;
+    --shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+    --glow-alpha: 0.32;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0d0f14;
+  --bg-2: #151923;
+  --surface: rgba(28, 32, 42, 0.72);
+  --surface-strong: #1c202a;
+  --border: rgba(255, 255, 255, 0.09);
+  --text: #eef0f4;
+  --text-muted: #a0a6b1;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --glow-alpha: 0.32;
+  color-scheme: dark;
+}

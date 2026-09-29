@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="GDG NTUST 抽獎輪盤" />
+    <title>Spin · GDG NTUST</title>
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <script>
+      // Apply saved theme before first paint to avoid a flash.
+      try {
+        var t = localStorage.getItem('spin:theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="GDG NTUST Spin 首頁">
+        <img class="brand-logo" src="/logo.svg" alt="" width="160" height="40" />
+      </a>
+      <h1 class="site-title">抽獎輪盤</h1>
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="切換深淺色"></button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel panel-entries" aria-labelledby="entries-heading">
+        <h2 id="entries-heading" class="panel-title">名單</h2>
+        <p class="placeholder">名單管理（第 2 階段）</p>
+      </section>
+
+      <section class="panel panel-wheel" aria-labelledby="wheel-heading">
+        <h2 id="wheel-heading" class="visually-hidden">輪盤</h2>
+        <div class="wheel-stage">
+          <div class="wheel-placeholder" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel-history" aria-labelledby="history-heading">
+        <h2 id="history-heading" class="panel-title">得獎紀錄</h2>
+        <p class="placeholder">尚無紀錄</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>GDG on Campus NTUST</p>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

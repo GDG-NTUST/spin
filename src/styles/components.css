@@ -1,0 +1,71 @@
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    background-color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out);
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.icon-btn:active {
+  transform: scale(0.9);
+}
+
+.icon-btn:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-btn .icon-swap {
+  animation: icon-in 360ms var(--ease-spring);
+}
+
+@keyframes icon-in {
+  from {
+    transform: rotate(-90deg) scale(0.4);
+    opacity: 0;
+  }
+}
+
+/* Temporary wheel placeholder: four-colour disc (real canvas wheel in stage 3) */
+.wheel-placeholder {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: var(--shadow);
+  animation: placeholder-spin 18s linear infinite;
+}
+
+.wheel-placeholder span:nth-child(1) { background: var(--blue); }
+.wheel-placeholder span:nth-child(2) { background: var(--red); }
+.wheel-placeholder span:nth-child(3) { background: var(--green); }
+.wheel-placeholder span:nth-child(4) { background: var(--yellow); }
+
+@keyframes placeholder-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-placeholder { animation: none; }
+  .icon-btn .icon-swap { animation: none; }
+}
