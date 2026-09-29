@@ -18,9 +18,10 @@ export interface SpinOptions {
 
 export interface SpinEvents {
   onStart?(): void;
-  /** Pegs passed this frame, and current speed in deg/s. */
-  onTick?(pegs: number, speed: number): void;
-  onFrame?(t: number, plan: SpinPlan): void;
+  /** Pegs passed this frame, current speed (deg/s) and signed direction of travel. */
+  onTick?(pegs: number, speed: number, dir: number): void;
+  /** Called every frame before the wheel is drawn at `rot`. */
+  onFrame?(t: number, plan: SpinPlan, rot: number): void;
   onQuickStop?(): void;
   onResult?(winner: Entry, stop: Stop): void;
 }
@@ -100,10 +101,10 @@ export class SpinController {
     const n = this.snapshot.length;
     const pegs = n > 1 ? pegsCrossed(this.lastRot, rot, n) : 0;
     const speed = Math.abs(velocityAt(plan, t));
-    if (pegs) this.events.onTick?.(pegs, speed);
+    if (pegs) this.events.onTick?.(pegs, speed, Math.sign(rot - this.lastRot) || plan.dir);
     this.lastRot = rot;
-    this.wheel.setRotation(rot);
-    this.events.onFrame?.(t, plan);
+    this.events.onFrame?.(t, plan, rot);
+    this.wheel.setRotation(rot, true);
 
     if (!done) {
       requestAnimationFrame((ts) => this.frame(ts));
@@ -119,6 +120,7 @@ export class SpinController {
       console.error('spin landed outside the chosen segment', { stop, to: plan.to });
     }
     this.plan = null;
+    this.wheel.trail = [];
     this.wheel.setRotation(plan.to);
     this.wheel.unlock();
     this.events.onResult?.(winner, stop);

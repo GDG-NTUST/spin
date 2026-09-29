@@ -36,6 +36,7 @@
   --wheel-empty: rgba(32, 33, 36, 0.06);
   --pointer-fill: #202124;
   --pointer-dot: #ffffff;
+  --dim-color: rgb(18 20 28 / 0.42);
   color-scheme: light;
 }
 
@@ -56,6 +57,7 @@
     --wheel-empty: rgba(255, 255, 255, 0.05);
     --pointer-fill: #ffffff;
     --pointer-dot: #202124;
+    --dim-color: rgb(2 3 8 / 0.7);
     color-scheme: dark;
   }
 }
@@ -76,5 +78,6 @@
   --wheel-empty: rgba(255, 255, 255, 0.05);
   --pointer-fill: #ffffff;
   --pointer-dot: #202124;
+  --dim-color: rgb(2 3 8 / 0.7);
   color-scheme: dark;
 }

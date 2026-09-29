@@ -501,3 +501,64 @@ kbd {
   .empty-state { animation: none; }
   .toast-success .check { animation: none; stroke-dashoffset: 0; }
 }
+
+/* ── Range slider ────────────────────────────────────────── */
+.range-field { display: grid; gap: 6px; margin-top: 4px; }
+.range-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.92rem; font-weight: 600; }
+.range-head output {
+  display: inline-block;
+  min-width: 3.2em;
+  text-align: right;
+  font-weight: 800;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+}
+.range-field .hint { margin: 0; }
+
+.range {
+  --fill: 25%;
+  width: 100%;
+  height: 26px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue) var(--fill), color-mix(in srgb, var(--text) 15%, transparent) var(--fill));
+}
+.range::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue) var(--fill), color-mix(in srgb, var(--text) 15%, transparent) var(--fill));
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -8px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--blue);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur) var(--ease-out);
+}
+.range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--blue);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+.range:hover::-webkit-slider-thumb { transform: scale(1.15); }
+.range:active::-webkit-slider-thumb { transform: scale(1.3); box-shadow: 0 0 0 8px color-mix(in srgb, var(--blue) 20%, transparent); }
+.range:hover::-moz-range-thumb { transform: scale(1.15); }
+.range:active::-moz-range-thumb { transform: scale(1.3); }
+.range:focus-visible { outline: none; }
+.range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 35%, transparent); }
+.range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 35%, transparent); }

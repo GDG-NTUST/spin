@@ -24,6 +24,7 @@
       </a>
       <h1 class="site-title">抽獎輪盤</h1>
       <div class="header-actions">
+        <button id="mute-toggle" class="icon-btn" type="button" aria-label="音效"></button>
         <button id="theme-toggle" class="icon-btn" type="button" aria-label="切換深淺色"></button>
       </div>
     </header>
@@ -91,6 +92,14 @@
             <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
             <span>抽中後自動從獎池移除</span>
           </label>
+          <div class="range-field">
+            <div class="range-head">
+              <label for="opt-near-miss">邊界演出機率</label>
+              <output id="near-miss-value" for="opt-near-miss"></output>
+            </div>
+            <input id="opt-near-miss" class="range" type="range" min="0" max="100" step="5" aria-describedby="near-miss-hint" />
+            <p id="near-miss-hint" class="hint">停點貼近分界線、在格釘上晃一下的機率。只是視覺演出，不影響抽獎結果。</p>
+          </div>
         </div>
       </section>
 

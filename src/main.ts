@@ -3,10 +3,12 @@ import './styles/layout.css';
 import './styles/components.css';
 import './styles/entries.css';
 import './styles/wheel.css';
+import { sfx, unlockAudioOnGesture } from './audio/sfx';
 import { loadState, persist } from './state/persist';
 import { createStore, newId } from './state/store';
 import { initEntryPanel } from './ui/entryPanel';
 import { initHistoryPanel } from './ui/historyPanel';
+import { initSettingsControls } from './ui/settingsControls';
 import { initThemeToggle } from './ui/themeToggle';
 import { toast } from './ui/toast';
 import { initWheel } from './wheel';
@@ -17,6 +19,8 @@ persist(store);
 initThemeToggle(document.querySelector<HTMLButtonElement>('#theme-toggle')!);
 initEntryPanel(store);
 initHistoryPanel(store);
+initSettingsControls(store);
+unlockAudioOnGesture();
 
 const announcer = document.querySelector<HTMLElement>('#announcer')!;
 
@@ -32,4 +36,4 @@ const wheel = initWheel(store, {
   },
 });
 
-if (import.meta.env.DEV) Object.assign(window, { __spin: { store, wheel } });
+if (import.meta.env.DEV) Object.assign(window, { __spin: { store, wheel, sfx } });

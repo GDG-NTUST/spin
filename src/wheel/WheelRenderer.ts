@@ -53,7 +53,10 @@ function readTheme(el: Element): WheelTheme {
  */
 export class WheelRenderer {
   rotation = 0;
-  /** Extra fading copies drawn behind the wheel for speed trails (stage 4 feeds this). */
+  /**
+   * Motion-blur samples: earlier rotations (oldest first). When non-empty the
+   * wheel is drawn as the average of these plus the current rotation.
+   */
   trail: number[] = [];
 
   private readonly ctx: CanvasRenderingContext2D;
@@ -213,9 +216,12 @@ export class WheelRenderer {
 
   // ── Rotation / pointer ─────────────────────────────────────
 
-  setRotation(rot: number): void {
+  /** `immediate` draws synchronously — use it from inside an animation frame to avoid a frame of lag. */
+  setRotation(rot: number, immediate = false): void {
     this.rotation = rot;
-    this.requestDraw();
+    if (!immediate) return this.requestDraw();
+    if (this.raf) cancelAnimationFrame(this.raf);
+    this.draw(performance.now());
   }
 
   /** Slice under the pointer, honouring animated weights. */
@@ -262,14 +268,14 @@ export class WheelRenderer {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, size, size);
 
-    // Speed trails: older frames first, fainter.
-    const trail = this.trail;
-    for (let i = 0; i < trail.length; i++) {
-      ctx.globalAlpha = ((i + 1) / (trail.length + 1)) * 0.45;
-      this.blitWheel(trail[i], c);
-    }
+    // Motion blur: layering copy i at alpha 1/(i+1) yields the equal-weight
+    // average of all samples — a box blur along the direction of travel.
+    const samples = this.trail.length ? [...this.trail, this.rotation] : [this.rotation];
+    samples.forEach((rot, i) => {
+      ctx.globalAlpha = 1 / (i + 1);
+      this.blitWheel(rot, c);
+    });
     ctx.globalAlpha = 1;
-    this.blitWheel(this.rotation, c);
     this.paintRim(c);
 
     const s = this.sliceAt();

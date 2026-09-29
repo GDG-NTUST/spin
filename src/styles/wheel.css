@@ -176,3 +176,56 @@
   .wheel-hub::after { animation: none; }
   .wheel-stage.is-charged .wheel-hub { animation: none; }
 }
+
+/* ── Climax: spotlight tightens, page dims (last ~1 s of a spin) ── */
+@property --spot-k {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 2.6;
+}
+
+.spotlight-dim {
+  --spot-k: 2.6;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    transparent calc(var(--spot-r, 200px) * var(--spot-k)),
+    var(--dim-color) calc(var(--spot-r, 200px) * (var(--spot-k) + 0.5))
+  );
+  transition:
+    opacity 600ms var(--ease-out),
+    --spot-k 950ms var(--ease-out);
+}
+.is-climax .spotlight-dim {
+  opacity: 1;
+  --spot-k: 1.04;
+}
+
+.wheel-stage::before {
+  /* warm light pooled behind the wheel */
+  content: '';
+  position: absolute;
+  inset: -5%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(255 236 170 / 0.55), rgb(255 236 170 / 0) 68%);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 800ms var(--ease-out), transform 900ms var(--ease-out);
+  pointer-events: none;
+}
+.is-climax .wheel-stage::before {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+/* Pointer glows a little while the wheel is a blur. */
+.wheel-stage.is-blurring .wheel-pointer { filter: drop-shadow(0 0 8px rgb(251 188 4 / 0.8)) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-dim { transition: opacity 300ms linear; }
+  .wheel-stage::before { transition: opacity 300ms linear; transform: none; }
+}
