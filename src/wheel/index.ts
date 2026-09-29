@@ -60,7 +60,7 @@ export function initWheel(store: Store, events: SpinEvents = {}): Wheel {
     ...events,
     onStart() {
       stage.classList.add('is-spinning');
-      hub.setAttribute('aria-label', '快停');
+      hub.setAttribute('aria-label', '停下');
       sfx.whoosh();
       events.onStart?.();
     },

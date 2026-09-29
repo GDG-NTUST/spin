@@ -112,7 +112,7 @@ export class ChipList {
     li.className = 'chip';
     li.dataset.id = entry.id;
     li.innerHTML = `
-      <button type="button" class="chip-name" title="點擊編輯"></button>
+      <button type="button" class="chip-name" title="點選編輯"></button>
       <button type="button" class="chip-del">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>
       </button>`;

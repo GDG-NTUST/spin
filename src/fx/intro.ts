@@ -42,7 +42,7 @@ export function playIntro(opts: { stage: HTMLElement; wheelRadius: number; title
       <div class="intro-disc"></div>
       <div class="intro-dots">${COLORS.map((c) => `<span class="intro-dot" style="--c:${c}"></span>`).join('')}</div>
     </div>
-    <p class="intro-skip">點擊任意處略過</p>`;
+    <p class="intro-skip">點選任意處略過</p>`;
   document.body.append(overlay);
 
   const chars = splitTitle(opts.title);
