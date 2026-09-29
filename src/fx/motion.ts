@@ -31,6 +31,12 @@ export function pop(el: Element, scale = 1.12): Animation | undefined {
   });
 }
 
+/** Button feedback: green pulse on success, red pulse + shake on error. */
+export function feedback(el: Element, ok: boolean): void {
+  flashClass(el, ok ? 'is-success' : 'is-error', 700);
+  if (!ok) shake(el);
+}
+
 /** Retrigger a CSS keyframe class (e.g. flash-success). */
 export function flashClass(el: Element, cls: string, ms = 700): void {
   el.classList.remove(cls);

@@ -1,6 +1,6 @@
 import { csvFileName, decodeCsvBytes, extractNamesFromCsv, namesToCsv } from '../lib/csv';
 import { duplicateIndices, mergeNames, nameKey, parseEntries } from '../lib/parseEntries';
-import { flashClass, shake } from '../fx/motion';
+import { feedback, flashClass, shake } from '../fx/motion';
 import { toEntries, updateSettings, type AppState, type Entry, type ImportMode, type Store } from '../state/store';
 import { ChipList } from './chipList';
 import { downloadText } from './download';
@@ -47,6 +47,7 @@ export function initEntryPanel(store: Store): void {
     const { entries, settings } = store.get();
     const parsed = parseEntries(textarea.value, { dedupe: settings.dedupe });
     if (parsed.length === 0) {
+      feedback(addBtn, false);
       shake(textarea);
       flashClass(textarea, 'is-error');
       toast('沒有可加入的名字', { type: 'error' });
@@ -61,6 +62,7 @@ export function initEntryPanel(store: Store): void {
       return;
     }
     setEntries([...entries, ...toEntries(added)]);
+    feedback(addBtn, true);
     textarea.value = '';
     flashClass(textarea, 'is-success');
     toast(`已加入 ${added.length} 人${totalSkipped ? `，略過 ${totalSkipped} 筆重複` : ''}`, { type: 'success' });
@@ -132,10 +134,11 @@ export function initEntryPanel(store: Store): void {
   exportBtn.addEventListener('click', () => {
     const { entries } = store.get();
     if (!entries.length) {
-      shake(exportBtn);
+      feedback(exportBtn, false);
       toast('名單是空的', { type: 'error' });
       return;
     }
+    feedback(exportBtn, true);
     downloadText(csvFileName('名單'), namesToCsv(entries.map((e) => e.name)));
     toast(`已匯出 ${entries.length} 人`, { type: 'success' });
   });
@@ -143,7 +146,7 @@ export function initEntryPanel(store: Store): void {
   clearBtn.addEventListener('click', () => {
     const prev = store.get().entries;
     if (!prev.length) {
-      shake(clearBtn);
+      feedback(clearBtn, false);
       return;
     }
     setEntries([]);

@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d0f14" media="(prefers-color-scheme: dark)" />
     <meta name="description" content="GDG NTUST 抽獎輪盤" />
     <title>Spin · GDG NTUST</title>
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
@@ -126,6 +128,7 @@
             <circle class="charge-track" cx="50" cy="50" r="48.6" />
             <circle class="charge-arc" cx="50" cy="50" r="48.6" pathLength="1" />
           </svg>
+          <div class="wheel-shadow" aria-hidden="true"></div>
           <canvas class="wheel-canvas" role="img" aria-label="抽獎輪盤"></canvas>
           <div class="wheel-pointer" aria-hidden="true">
             <svg viewBox="0 0 40 52"><path d="M20 50 3.5 14.5A18 18 0 1 1 36.5 14.5Z" /><circle cx="20" cy="17" r="6" /></svg>
@@ -159,7 +162,7 @@
             <span class="batch-progress">批次抽獎 <b class="batch-done">0</b> / <b class="batch-total">0</b></span>
             <button id="batch-stop" class="btn btn-ghost btn-sm btn-danger" type="button">停止</button>
           </div>
-          <ol class="batch-tray-list"></ol>
+          <ol class="batch-tray-list" tabindex="0" aria-label="本批得獎者"></ol>
         </div>
       </section>
 
@@ -177,7 +180,7 @@
           </button>
           </div>
         </div>
-        <ol id="history-list" class="history-list" reversed></ol>
+        <ol id="history-list" class="history-list" reversed tabindex="0" aria-label="得獎紀錄列表"></ol>
         <p id="history-empty" class="empty-state">尚無紀錄</p>
       </section>
     </main>

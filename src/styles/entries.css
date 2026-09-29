@@ -64,7 +64,7 @@ kbd {
   padding: 4px 12px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--blue) 14%, transparent);
-  color: var(--blue);
+  color: var(--blue-text);
   font-weight: 800;
   font-size: 1.05rem;
 }
@@ -124,7 +124,7 @@ kbd {
 .btn[aria-disabled='true']:hover { transform: none; box-shadow: none; }
 
 .btn-primary {
-  --btn-bg: var(--blue);
+  --btn-bg: var(--btn-primary-bg);
   --btn-fg: #fff;
   border-color: transparent;
   box-shadow: 0 6px 18px color-mix(in srgb, var(--blue) 35%, transparent);
@@ -140,7 +140,7 @@ kbd {
 .btn-ghost { --btn-bg: transparent; }
 .btn-ghost:hover { --btn-bg: var(--surface-strong); }
 .btn-sm { min-height: 34px; padding: 0 12px; font-size: 0.85rem; }
-.btn-danger:hover { color: var(--red); border-color: color-mix(in srgb, var(--red) 40%, transparent); }
+.btn-danger:hover { color: var(--red-text); border-color: color-mix(in srgb, var(--red) 40%, transparent); }
 
 /* ── Inputs ──────────────────────────────────────────────── */
 .input {
@@ -272,7 +272,7 @@ kbd {
   transition: transform var(--dur) var(--ease-spring);
 }
 .dropzone-text { font-size: 0.9rem; font-weight: 600; }
-.dropzone-link { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+.dropzone-link { color: var(--blue-text); text-decoration: underline; text-underline-offset: 3px; }
 .dropzone:hover { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 5%, transparent); }
 .dropzone:hover .dropzone-icon { transform: translateY(-3px); }
 .dropzone:active { transform: scale(0.98); }
@@ -386,7 +386,7 @@ kbd {
   transition: background-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast) var(--ease-spring);
 }
 .chip-del svg { width: 14px; height: 14px; }
-.chip-del:hover { background: color-mix(in srgb, var(--red) 15%, transparent); color: var(--red); transform: rotate(90deg); }
+.chip-del:hover { background: color-mix(in srgb, var(--red) 15%, transparent); color: var(--red-text); transform: rotate(90deg); }
 .chip-del:active { transform: rotate(90deg) scale(0.8); }
 
 .chip.is-editing { border-color: var(--blue); box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 22%, transparent); }
@@ -433,7 +433,7 @@ kbd {
   background: var(--surface-strong);
   border: 1px solid var(--border);
 }
-.history-order { font-weight: 800; color: var(--blue); font-variant-numeric: tabular-nums; }
+.history-order { font-weight: 800; color: var(--blue-text); font-variant-numeric: tabular-nums; }
 .history-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .history-time { font-size: 0.8rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 
@@ -482,7 +482,7 @@ kbd {
   padding: 6px 10px;
   border-radius: 8px;
   background: color-mix(in srgb, var(--blue) 14%, transparent);
-  color: var(--blue);
+  color: var(--blue-text);
   font: inherit;
   font-weight: 800;
   cursor: pointer;
@@ -510,7 +510,7 @@ kbd {
   min-width: 3.2em;
   text-align: right;
   font-weight: 800;
-  color: var(--blue);
+  color: var(--blue-text);
   font-variant-numeric: tabular-nums;
 }
 .range-field .hint { margin: 0; }

@@ -119,6 +119,7 @@ export function initWheel(store: Store, events: SpinEvents = {}): Wheel {
     renderer.setEntries(entries, animate);
     stage.classList.toggle('is-empty', entries.length === 0);
     hub.setAttribute('aria-disabled', String(entries.length === 0));
+    canvas.setAttribute('aria-label', entries.length ? `抽獎輪盤，共 ${entries.length} 人` : '抽獎輪盤（尚無名單）');
     updateNameplate();
   };
   sync(store.get().entries, false);

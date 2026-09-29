@@ -5,6 +5,7 @@ import './styles/entries.css';
 import './styles/wheel.css';
 import './styles/reveal.css';
 import './styles/background.css';
+import './styles/polish.css';
 import { sfx, unlockAudioOnGesture } from './audio/sfx';
 import { initBackground, initScrollReveal } from './fx/background';
 import { introPending, playIntro } from './fx/intro';
@@ -16,6 +17,12 @@ import { initHistoryPanel } from './ui/historyPanel';
 import { initSettingsControls } from './ui/settingsControls';
 import { initThemeToggle } from './ui/themeToggle';
 import { initWheel } from './wheel';
+
+// Switch thumbs only bounce after the user toggles them, not on first render.
+document.querySelectorAll<HTMLElement>('.switch').forEach((l) => {
+  l.classList.add('no-anim');
+  l.addEventListener('change', () => l.classList.remove('no-anim'), { once: true });
+});
 
 const store = createStore(loadState());
 persist(store);

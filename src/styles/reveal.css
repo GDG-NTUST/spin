@@ -123,7 +123,7 @@
   font-weight: 800;
   font-size: 1.1rem;
 }
-.batch-order { color: var(--blue); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+.batch-order { color: var(--blue-text); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
 
 /* ── Draw controls under the wheel ───────────────────────── */
 .draw-controls {
@@ -179,7 +179,7 @@
 .stepper-input:focus { outline: none; }
 .stepper-input::-webkit-outer-spin-button,
 .stepper-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.stepper-input.is-error { color: var(--red); animation: none; }
+.stepper-input.is-error { color: var(--red-text); animation: none; }
 #batch-n { display: inline-block; min-width: 1ch; }
 
 /* ── Batch progress tray ─────────────────────────────────── */
@@ -194,7 +194,7 @@
 }
 .batch-tray[hidden] { display: none; }
 .batch-tray-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-weight: 700; }
-.batch-done { display: inline-block; color: var(--blue); }
+.batch-done { display: inline-block; color: var(--blue-text); }
 .batch-tray-list {
   display: flex;
   flex-wrap: wrap;

@@ -1,5 +1,5 @@
 import { sfx } from '../audio/sfx';
-import { flashClass, pop, shake } from '../fx/motion';
+import { feedback, flashClass, pop, shake } from '../fx/motion';
 import { newId, updateSettings, type AppState, type Entry, type Store } from '../state/store';
 import type { SpinEvents } from '../wheel/SpinController';
 import type { Wheel } from '../wheel';
@@ -216,7 +216,7 @@ export class DrawFlow {
       const pool = this.store.get().entries.length;
       if (this.wheel.controller.spinning || this.batch) return;
       if (pool === 0) {
-        shake(start);
+        feedback(start, false);
         toast('名單是空的，先加入參加者', { type: 'error' });
         return;
       }

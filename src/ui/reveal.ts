@@ -83,7 +83,7 @@ export class RevealCard {
     const items = names
       .map((n, i) => `<li class="batch-item"><span class="batch-order">#${startOrder + i}</span><span class="batch-name">${escapeHtml(n)}</span></li>`)
       .join('');
-    this.render('批次抽獎結果', `<p class="reveal-meta">共 ${names.length} 位得獎者</p><ol class="batch-list">${items}</ol>`, '', [
+    this.render('批次抽獎結果', `<p class="reveal-meta">共 ${names.length} 位得獎者</p><ol class="batch-list" tabindex="0" aria-label="批次得獎者">${items}</ol>`, '', [
       ['close', '完成', 'btn-primary'],
     ]);
     return this.show(false);
@@ -104,7 +104,10 @@ export class RevealCard {
       })
       .to(this.card, reduced ? { opacity: 0, duration: 0.15 } : { opacity: 0, scale: 0.92, y: 16, duration: 0.2, ease: 'power2.in' })
       .to(this.root.querySelector('.reveal-backdrop'), { opacity: 0, duration: 0.2 }, 0);
-    this.returnFocus?.focus({ preventScroll: true });
+    this.setInert(false);
+    // Safari doesn't focus buttons on click, so fall back to the start button.
+    const back = this.returnFocus && this.returnFocus !== document.body ? this.returnFocus : document.querySelector<HTMLElement>('.wheel-hub');
+    back?.focus({ preventScroll: true });
     resolve(action);
   }
 
@@ -139,6 +142,7 @@ export class RevealCard {
     if (this.resolve) this.close();
     this.returnFocus = document.activeElement as HTMLElement | null;
     this.root.hidden = false;
+    this.setInert(true);
     const reduced = prefersReducedMotion();
     const q = <T extends Element>(sel: string) => this.root.querySelectorAll<T>(sel);
     const backdrop = this.root.querySelector('.reveal-backdrop');
@@ -179,6 +183,11 @@ export class RevealCard {
     this.fire({ ...common, particleCount: 90, angle: 60, spread: 60, startVelocity: 55, origin: { x: 0, y: 0.75 } });
     this.fire({ ...common, particleCount: 90, angle: 120, spread: 60, startVelocity: 55, origin: { x: 1, y: 0.75 } });
     setTimeout(() => this.fire({ ...common, particleCount: 120, spread: 110, startVelocity: 38, origin: { x: 0.5, y: 0.38 }, shapes: ['square', 'circle'] }), 160);
+  }
+
+  /** Everything behind the dialog is removed from focus order and the a11y tree. */
+  private setInert(on: boolean): void {
+    document.querySelectorAll<HTMLElement>('.site-header, .layout, .site-footer').forEach((el) => (el.inert = on));
   }
 
   private onKey(e: KeyboardEvent): void {

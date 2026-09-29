@@ -9,6 +9,10 @@
   --green: #34a853;
   /* Yellow used for text: darker in light mode for contrast */
   --yellow-text: #e37400;
+  /* Brand colours used as text / button fills, tuned for WCAG AA contrast */
+  --blue-text: #1967d2;
+  --red-text: #d93025;
+  --btn-primary-bg: #1a73e8;
 
   --radius-sm: 8px;
   --radius: 14px;
@@ -65,6 +69,8 @@
     --pointer-dot: #202124;
     --dim-color: rgb(2 3 8 / 0.7);
     --yellow-text: var(--yellow);
+    --blue-text: #8ab4f8;
+    --red-text: #f28b82;
     --shape-alpha: 1;
     --sparkle-alpha: 0.9;
     --beam-alpha: 0.07;
@@ -91,6 +97,8 @@
   --pointer-dot: #202124;
   --dim-color: rgb(2 3 8 / 0.7);
   --yellow-text: var(--yellow);
+  --blue-text: #8ab4f8;
+  --red-text: #f28b82;
   --shape-alpha: 1;
   --sparkle-alpha: 0.9;
   --beam-alpha: 0.07;

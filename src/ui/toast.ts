@@ -68,7 +68,17 @@ export function toast(message: string, { type = 'info', duration = 3200, action 
   }
 
   let gone = false;
-  const timer = window.setTimeout(dismiss, action ? duration + 2500 : duration);
+  let timer = window.setTimeout(dismiss, action ? duration + 2500 : duration);
+  // Pause while the pointer or keyboard focus is on the toast (WCAG 2.2.1).
+  const pause = () => clearTimeout(timer);
+  const resume = () => {
+    clearTimeout(timer);
+    if (!el.matches(':hover, :focus-within')) timer = window.setTimeout(dismiss, 1500);
+  };
+  el.addEventListener('pointerenter', pause);
+  el.addEventListener('focusin', pause);
+  el.addEventListener('pointerleave', resume);
+  el.addEventListener('focusout', resume);
   function dismiss() {
     if (gone) return;
     gone = true;

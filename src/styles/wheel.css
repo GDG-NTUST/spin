@@ -13,7 +13,15 @@
   height: 100%;
   touch-action: none;
   cursor: grab;
-  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.22));
+}
+/* Static shadow disc under the wheel. (A CSS filter on the canvas itself
+   would be re-rasterised every frame — halves the frame rate on iOS.) */
+.wheel-shadow {
+  position: absolute;
+  inset: 3.5%;
+  border-radius: 50%;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
 }
 .wheel-stage.is-dragging .wheel-canvas { cursor: grabbing; }
 .wheel-stage.is-spinning .wheel-canvas { cursor: pointer; }
@@ -86,7 +94,7 @@
   pointer-events: none;
 }
 .hub-label { position: relative; grid-area: 1 / 1; transition: opacity 180ms, transform 260ms var(--ease-spring); }
-.hub-label-stop { opacity: 0; transform: scale(0.6); color: var(--red); }
+.hub-label-stop { opacity: 0; transform: scale(0.6); color: var(--red-text); }
 
 .wheel-hub:hover { transform: scale(1.06); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32), inset 0 -4px 10px rgba(0, 0, 0, 0.12); }
 .wheel-hub:active { transform: scale(0.92); transition-duration: 80ms; }

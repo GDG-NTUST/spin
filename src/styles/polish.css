@@ -1,0 +1,92 @@
+/* Cross-cutting interaction states, touch ergonomics and motion preferences. */
+
+/* ── Success / error feedback on buttons ─────────────────── */
+.btn.is-success { animation: btn-success 700ms var(--ease-out); }
+.btn.is-error { animation: btn-error 600ms var(--ease-out); }
+@keyframes btn-success {
+  25% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--green) 35%, transparent); border-color: var(--green); }
+}
+@keyframes btn-error {
+  25% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--red) 30%, transparent); border-color: var(--red); }
+}
+
+/* Switch: the thumb gives a little bounce when it lands. */
+.switch input:checked + .switch-track .switch-thumb { animation: thumb-land 380ms var(--ease-spring); }
+.switch input:not(:checked) + .switch-track .switch-thumb { animation: thumb-land-off 380ms var(--ease-spring); }
+@keyframes thumb-land { 40% { width: 26px; } }
+@keyframes thumb-land-off { 40% { width: 26px; } }
+/* …but not on first paint. */
+.switch.no-anim .switch-thumb { animation: none !important; }
+
+/* Chips press down. */
+.chip:active { transform: scale(0.96); }
+
+/* Toasts lift a little on hover (their timer pauses too). */
+.toast { transition: transform var(--dur) var(--ease-spring), box-shadow var(--dur) var(--ease-out); }
+.toast:hover { transform: translateY(-2px); }
+
+/* ── Touch devices: bigger targets, no sticky hover, no iOS zoom ── */
+@media (pointer: coarse) {
+  .icon-btn { width: 44px; height: 44px; }
+  .btn { min-height: 44px; }
+  .btn-sm { min-height: 40px; padding: 0 14px; }
+  .chip-name { padding: 8px 4px 8px 8px; }
+  .chip-del { width: 34px; height: 34px; }
+  .chip-input { font-size: 16px; }
+  .stepper-btn { width: 44px; height: 44px; }
+  .stepper-input { font-size: 16px; }
+  .toast-action { padding: 10px 14px; }
+  .segmented span:not(.segmented-indicator) { padding: 9px 18px; }
+}
+
+/* Backdrop blur over animated content is costly on phones; use a solid surface. */
+@media (pointer: coarse) {
+  .panel:not(.panel-wheel) { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--surface-strong); }
+}
+
+/* Scrollable lists are keyboard-focusable; show where focus is. */
+.history-list:focus-visible,
+.batch-tray-list:focus-visible,
+.batch-list:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; border-radius: var(--radius); }
+
+@media (hover: none) {
+  .btn:hover,
+  .icon-btn:hover,
+  .chip:hover,
+  .wheel-hub:hover,
+  .toast:hover { transform: none; }
+  .btn:hover { box-shadow: none; }
+  .btn-primary:hover { box-shadow: 0 6px 18px color-mix(in srgb, var(--blue) 35%, transparent); }
+  .chip-del:hover { transform: none; background: none; color: var(--text-muted); }
+  .dropzone:hover { border-color: color-mix(in srgb, var(--text) 22%, transparent); background: none; }
+  .dropzone:hover .dropzone-icon { transform: none; }
+}
+
+/* ── Reduced motion: short, non-spatial transitions everywhere ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 120ms !important;
+    scroll-behavior: auto !important;
+  }
+  .btn.is-success,
+  .btn.is-error,
+  .switch-thumb { animation: none !important; }
+  .btn:hover,
+  .icon-btn:hover,
+  .chip:hover,
+  .chip:active,
+  .wheel-hub:hover,
+  .wheel-hub:active,
+  .toast:hover { transform: none; }
+}
+
+/* ── Forced colours (Windows high contrast) ──────────────── */
+@media (forced-colors: active) {
+  .btn,
+  .chip,
+  .wheel-hub,
+  .toast { border: 1px solid CanvasText; }
+  .switch-track { border: 1px solid CanvasText; }
+}

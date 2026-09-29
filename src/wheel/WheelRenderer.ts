@@ -19,7 +19,8 @@ interface Slice {
 /** Below this label size (CSS px) names are hidden and only colours remain. */
 const MIN_FONT = 10;
 const TRANSITION_MS = 480;
-const MAX_DPR = 2.5;
+/** Canvas resolution cap: phones get 2× (plenty sharp, much cheaper to blit). */
+const MAX_DPR = matchMedia('(pointer: coarse)').matches ? 2 : 2.5;
 
 const DEG = Math.PI / 180;
 const easeOutBack = (t: number) => 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2;
@@ -493,6 +494,10 @@ export class WheelRenderer {
       g.font = `700 ${fs}px ${theme.font}`;
       g.fillStyle = LABEL_COLORS[s.color];
       g.globalAlpha = s.w1 === 0 ? s.w : 1;
+      // Soft shadow under white labels lifts contrast on the lighter slices.
+      g.shadowColor = s.color === 2 ? 'transparent' : 'rgba(0, 0, 0, 0.35)';
+      g.shadowBlur = 3;
+      g.shadowOffsetY = 1;
       const mid = start + sw / 2; // canvas angle; 90°–270° is the left half
       const flip = mod(mid, 360) > 90 && mod(mid, 360) < 270;
       g.save();
@@ -504,6 +509,8 @@ export class WheelRenderer {
       g.restore();
     }
     g.globalAlpha = 1;
+    g.shadowColor = 'transparent';
+    g.shadowBlur = g.shadowOffsetY = 0;
   }
 
   private setLabels(visible: boolean): void {

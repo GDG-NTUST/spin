@@ -1,5 +1,5 @@
 import { csvFileName, formatDateTime, resultsToCsv } from '../lib/csv';
-import { EASE_OUT, EASE_SPRING, prefersReducedMotion, shake } from '../fx/motion';
+import { EASE_OUT, EASE_SPRING, feedback, prefersReducedMotion } from '../fx/motion';
 import type { AppState, Store, Winner } from '../state/store';
 import { downloadText } from './download';
 import { toast } from './toast';
@@ -13,7 +13,7 @@ export function initHistoryPanel(store: Store): void {
 
   clearBtn.addEventListener('click', () => {
     const prev = store.get().history;
-    if (!prev.length) return void shake(clearBtn);
+    if (!prev.length) return void feedback(clearBtn, false);
     store.set((s) => ({ ...s, history: [] }));
     toast(`已清除 ${prev.length} 筆紀錄`, { action: { label: '復原', run: () => store.set((s) => ({ ...s, history: prev })) } });
   });
@@ -21,10 +21,11 @@ export function initHistoryPanel(store: Store): void {
   exportBtn.addEventListener('click', () => {
     const { history } = store.get();
     if (!history.length) {
-      shake(exportBtn);
+      feedback(exportBtn, false);
       toast('還沒有抽獎紀錄', { type: 'error' });
       return;
     }
+    feedback(exportBtn, true);
     downloadText(csvFileName('結果'), resultsToCsv(history));
     toast(`已匯出 ${history.length} 筆紀錄`, { type: 'success' });
   });
