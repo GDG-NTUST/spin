@@ -44,7 +44,18 @@ const revealTargets = '.panel:not(.panel-wheel), .site-footer';
 const startReveal = () => {
   initScrollReveal(revealTargets);
   document.documentElement.classList.remove('reveal-pending');
+  focusEntryInput();
 };
+
+/**
+ * Ready to paste a list straight away. Skipped on touch screens (it would pop
+ * the keyboard over the wheel) and if the user already focused something.
+ */
+function focusEntryInput(): void {
+  if (!matchMedia('(pointer: fine)').matches) return;
+  if (document.activeElement && document.activeElement !== document.body) return;
+  document.querySelector<HTMLTextAreaElement>('#entry-input')?.focus({ preventScroll: true });
+}
 if (introPending()) {
   void playIntro({
     stage: document.querySelector<HTMLElement>('#wheel-stage')!,
