@@ -36,6 +36,10 @@ export class SpinController {
   private snapshot: readonly Entry[] = [];
   private stop: Stop | null = null;
   private lastRot = 0;
+  /** While true (reveal card open, batch running) user input can't start a spin. */
+  blocked = false;
+  /** Options merged into every spin request (e.g. fast mode). */
+  defaults: () => SpinOptions = () => ({});
 
   constructor(
     private readonly wheel: WheelRenderer,
@@ -51,8 +55,9 @@ export class SpinController {
     return !this.spinning && this.store.get().entries.length > 0;
   }
 
-  spin({ strength, dir = 1, v0 = 0, fast = false }: SpinOptions = {}): boolean {
+  spin(opts: SpinOptions = {}): boolean {
     if (!this.canSpin()) return false;
+    const { strength, dir = 1, v0 = 0, fast = false } = { ...this.defaults(), ...opts };
     const { entries, settings } = this.store.get();
     const reduced = prefersReducedMotion();
 

@@ -1,0 +1,226 @@
+/* ── Reveal dialog ───────────────────────────────────────── */
+.reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.reveal[hidden] { display: none; }
+
+.reveal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(8 10 16 / 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.reveal-confetti {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+.reveal-flash {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 45%, #fff, rgb(255 244 200 / 0.7) 40%, rgb(255 255 255 / 0) 75%);
+}
+
+.reveal-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 460px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: 34px 28px 26px;
+  border-radius: 28px;
+  background: var(--surface-strong);
+  color: var(--text);
+  text-align: center;
+  box-shadow:
+    0 30px 80px rgb(0 0 0 / 0.45),
+    0 0 0 1px var(--border),
+    0 0 60px rgb(251 188 4 / 0.25);
+}
+
+.reveal-ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 7px;
+}
+.reveal-ribbon span { transform-origin: left; }
+.reveal-ribbon span:nth-child(1) { background: var(--blue); }
+.reveal-ribbon span:nth-child(2) { background: var(--red); }
+.reveal-ribbon span:nth-child(3) { background: var(--yellow); }
+.reveal-ribbon span:nth-child(4) { background: var(--green); }
+
+.reveal-kicker {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+}
+
+.reveal-name {
+  margin: 4px 0 8px;
+  font-size: clamp(2.4rem, 11vw, 4rem);
+  font-weight: 900;
+  line-height: 1.15;
+  word-break: break-word;
+}
+.reveal-name .ch {
+  display: inline-block;
+  text-shadow: 0 3px 0 rgb(0 0 0 / 0.08);
+}
+/* Letters cycle through the four brand colours. */
+.reveal-name .ch:nth-child(4n + 1) { color: var(--blue); }
+.reveal-name .ch:nth-child(4n + 2) { color: var(--red); }
+.reveal-name .ch:nth-child(4n + 3) { color: var(--yellow-text); }
+.reveal-name .ch:nth-child(4n + 4) { color: var(--green); }
+
+.reveal-meta { margin: 0; color: var(--text-muted); font-weight: 700; }
+.reveal-note { margin: 10px 0 0; font-size: 0.85rem; color: var(--text-muted); }
+.reveal-note[hidden] { display: none; }
+
+.reveal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+.reveal-actions .btn { min-width: 110px; }
+
+/* Batch summary list */
+.batch-list {
+  display: grid;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  max-height: 46dvh;
+  overflow: auto;
+}
+.batch-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+.batch-order { color: var(--blue); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+
+/* ── Draw controls under the wheel ───────────────────────── */
+.draw-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px 22px;
+  margin: 16px auto 0;
+}
+.draw-controls .switch small { font-weight: 500; }
+.batch-control { display: flex; align-items: center; gap: 10px; }
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-strong);
+  transition: border-color var(--dur), box-shadow var(--dur);
+}
+.stepper:focus-within { border-color: var(--blue); box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 22%, transparent); }
+.stepper-btn {
+  width: 36px;
+  height: 38px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: background-color var(--dur-fast), transform var(--dur-fast) var(--ease-spring);
+  -webkit-tap-highlight-color: transparent;
+}
+.stepper-btn:hover { background: color-mix(in srgb, var(--blue) 12%, transparent); }
+.stepper-btn:active { transform: scale(0.8); }
+.stepper-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+.stepper-input {
+  width: 3.2ch;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.stepper-input:focus { outline: none; }
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.stepper-input.is-error { color: var(--red); animation: none; }
+#batch-n { display: inline-block; min-width: 1ch; }
+
+/* ── Batch progress tray ─────────────────────────────────── */
+.batch-tray {
+  margin: 16px auto 0;
+  max-width: 620px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.batch-tray[hidden] { display: none; }
+.batch-tray-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-weight: 700; }
+.batch-done { display: inline-block; color: var(--blue); }
+.batch-tray-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 140px;
+  overflow: auto;
+}
+.batch-tray-list:empty { display: none; }
+.batch-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  border: 1.5px solid color-mix(in srgb, var(--yellow) 60%, var(--border));
+  font-weight: 800;
+}
+
+/* ── History ─────────────────────────────────────────────── */
+.panel-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.history-item { transition: background-color 1s var(--ease-out), border-color 1s var(--ease-out); }
+.history-item.is-new {
+  background: color-mix(in srgb, var(--yellow) 18%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--yellow) 60%, var(--border));
+}

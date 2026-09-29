@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '../fx/motion';
 import { mod } from '../lib/spinMath';
 import type { Entry } from '../state/store';
 import { EASE_OUT_FN } from './easing';
@@ -21,6 +22,7 @@ const TRANSITION_MS = 480;
 const MAX_DPR = 2.5;
 
 const DEG = Math.PI / 180;
+const easeOutBack = (t: number) => 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2;
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const mixRgb = (a: RGB, b: RGB, t: number): RGB => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
 const css = (c: RGB, alpha = 1) => `rgba(${c[0] | 0}, ${c[1] | 0}, ${c[2] | 0}, ${alpha})`;
@@ -74,6 +76,7 @@ export class WheelRenderer {
   private theme: WheelTheme;
   private lastPointerId: string | null | undefined;
   private labels = true;
+  private hl: { id: string; start: number; out: boolean } | null = null;
 
   onPointerChange: (slice: { id: string; name: string } | null) => void = () => {};
   onLabelsChange: (visible: boolean) => void = () => {};
@@ -277,6 +280,7 @@ export class WheelRenderer {
     });
     ctx.globalAlpha = 1;
     this.paintRim(c);
+    if (this.hl) this.paintHighlight(now, c);
 
     const s = this.sliceAt();
     const id = s?.id ?? null;
@@ -285,7 +289,7 @@ export class WheelRenderer {
       this.onPointerChange(s && { id: s.id, name: s.name });
     }
 
-    if (this.transitioning) this.requestDraw();
+    if (this.transitioning || this.hl) this.requestDraw();
   }
 
   private blitWheel(rot: number, c: number): void {
@@ -317,6 +321,92 @@ export class WheelRenderer {
     ctx.restore();
   }
 
+  /** Slice wedges in canvas degrees. Local angle 0 = top, clockwise → canvas angle = local − 90°. */
+  private arcs(): { s: Slice; start: number; sweep: number }[] {
+    const total = this.slices.reduce((a, s) => a + s.w, 0);
+    let a = -90;
+    const out: { s: Slice; start: number; sweep: number }[] = [];
+    for (const s of this.slices) {
+      const sweep = (s.w / total) * 360;
+      if (sweep > 0.01) out.push({ s, start: a, sweep });
+      a += sweep;
+    }
+    return out;
+  }
+
+  // ── Winner highlight ───────────────────────────────────────
+
+  /** Light up one slice (and dim the rest); null fades the highlight out. */
+  setHighlight(id: string | null): void {
+    const now = performance.now();
+    if (id) this.hl = { id, start: now, out: false };
+    else if (this.hl && !this.hl.out) this.hl = { ...this.hl, start: now, out: true };
+    this.requestDraw();
+  }
+
+  private paintHighlight(now: number, c: number): void {
+    const hl = this.hl!;
+    const elapsed = now - hl.start;
+    const reduced = prefersReducedMotion();
+    const dur = hl.out ? 260 : reduced ? 150 : 420;
+    const raw = Math.min(1, elapsed / dur);
+    if (hl.out && raw >= 1) {
+      this.hl = null;
+      return;
+    }
+    const p = hl.out ? 1 - EASE_OUT_FN(raw) : reduced ? raw : easeOutBack(raw);
+    const arc = this.arcs().find((a) => a.s.id === hl.id);
+    if (!arc) {
+      this.hl = null;
+      return;
+    }
+    const { ctx, theme } = this;
+    const r = this.radius;
+    const pulse = 0.5 + 0.5 * Math.sin(now / 220);
+
+    // Dim everything else.
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(c, c, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0, 0, 0, ${0.5 * Math.min(1, p)})`;
+    ctx.fill();
+
+    // Winner wedge, pushed outward and enlarged.
+    const { s, start, sweep } = arc;
+    const mid = (start + sweep / 2) * DEG;
+    const scale = reduced ? 1 : 1 + 0.07 * p;
+    const push = reduced ? 0 : r * 0.035 * p;
+    ctx.translate(c, c);
+    ctx.rotate(this.rotation * DEG);
+    ctx.translate(Math.cos(mid) * push, Math.sin(mid) * push);
+    ctx.scale(scale, scale);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, r, start * DEG, (start + sweep) * DEG);
+    ctx.closePath();
+    ctx.shadowColor = `rgba(255, 236, 170, ${0.6 + 0.35 * pulse})`;
+    ctx.shadowBlur = 18 + 16 * pulse;
+    ctx.fillStyle = css(mixRgb(PALETTE[s.color], [255, 255, 255], 0.12 + 0.1 * pulse));
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+    ctx.stroke();
+
+    // Label, even when the wheel's own labels are hidden (sized to fit).
+    const textR = r * 0.6;
+    const fs = Math.max(11, Math.min(r * 0.09, 30, sweep * DEG * textR * 0.8));
+    const flip = mod(start + sweep / 2, 360) > 90 && mod(start + sweep / 2, 360) < 270;
+    ctx.rotate(flip ? mid + Math.PI : mid);
+    ctx.font = `800 ${fs}px ${theme.font}`;
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = flip ? 'left' : 'right';
+    ctx.fillStyle = LABEL_COLORS[s.color];
+    const outer = r * 0.9;
+    ctx.fillText(fitText(ctx, s.name, outer - r * 0.27), flip ? -outer : outer, 0);
+    ctx.restore();
+  }
+
   private paintSlices(): void {
     this.offDirty = false;
     const { offCtx: g, dpr, size, theme } = this;
@@ -340,14 +430,7 @@ export class WheelRenderer {
       return;
     }
 
-    // Slices. Local angle 0 = top, clockwise → canvas angle = local − 90°.
-    let a = -90;
-    const arcs: { s: Slice; start: number; sweep: number }[] = [];
-    for (const s of this.slices) {
-      const sweep = (s.w / total) * 360;
-      if (sweep > 0.01) arcs.push({ s, start: a, sweep });
-      a += sweep;
-    }
+    const arcs = this.arcs();
     for (const { s, start, sweep } of arcs) {
       g.beginPath();
       g.moveTo(c, c);

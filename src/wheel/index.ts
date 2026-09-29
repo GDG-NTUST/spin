@@ -87,8 +87,6 @@ export function initWheel(store: Store, events: SpinEvents = {}): Wheel {
     onResult(winner: Entry, stop) {
       stage.classList.remove('is-spinning', 'is-blurring');
       hub.setAttribute('aria-label', '開始抽獎');
-      sfx.reveal();
-      spotlight.release(1400);
       events.onResult?.(winner, stop);
     },
   });

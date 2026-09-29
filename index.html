@@ -129,15 +129,45 @@
           </button>
         </div>
         <p id="wheel-help" class="wheel-help">點擊「開始」、甩動輪盤，或按住<kbd>空白鍵</kbd>蓄力後放開；轉動中再點一下即可快停</p>
+
+        <div class="draw-controls">
+          <label class="switch">
+            <input id="opt-fast" type="checkbox" role="switch" aria-describedby="fast-hint" />
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            <span>快速模式 <small id="fast-hint" class="hint">第 2 次起約 2 秒</small></span>
+          </label>
+          <div class="batch-control">
+            <div class="stepper">
+              <button type="button" class="stepper-btn" data-step="-1" aria-label="減少人數">−</button>
+              <input id="batch-count" class="stepper-input" type="number" inputmode="numeric" min="1" value="3" aria-label="批次人數" />
+              <button type="button" class="stepper-btn" data-step="1" aria-label="增加人數">+</button>
+            </div>
+            <button id="batch-start" class="btn btn-primary" type="button">批次抽 <span id="batch-n">3</span> 人</button>
+          </div>
+        </div>
+
+        <div id="batch-tray" class="batch-tray" hidden>
+          <div class="batch-tray-head">
+            <span class="batch-progress">批次抽獎 <b class="batch-done">0</b> / <b class="batch-total">0</b></span>
+            <button id="batch-stop" class="btn btn-ghost btn-sm btn-danger" type="button">停止</button>
+          </div>
+          <ol class="batch-tray-list"></ol>
+        </div>
       </section>
 
       <section class="panel panel-history" aria-labelledby="history-heading">
         <div class="panel-head">
           <h2 id="history-heading" class="panel-title">得獎紀錄</h2>
+          <div class="panel-actions">
+          <button id="clear-history" class="btn btn-ghost btn-sm btn-danger" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+            清除
+          </button>
           <button id="export-results" class="btn btn-ghost btn-sm" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"/></svg>
             匯出結果
           </button>
+          </div>
         </div>
         <ol id="history-list" class="history-list" reversed></ol>
         <p id="history-empty" class="empty-state">尚無紀錄</p>

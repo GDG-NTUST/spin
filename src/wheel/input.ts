@@ -36,7 +36,7 @@ export function initWheelInput(o: WheelInputOptions): void {
   // ── Hub button ─────────────────────────────────────────────
   hub.addEventListener('click', () => {
     if (controller.spinning) controller.quickStop();
-    else start();
+    else if (!controller.blocked) start();
   });
 
   // ── Drag / fling ───────────────────────────────────────────
@@ -59,7 +59,7 @@ export function initWheelInput(o: WheelInputOptions): void {
       controller.quickStop();
       return;
     }
-    if (e.button !== 0) return;
+    if (e.button !== 0 || controller.blocked) return;
     e.preventDefault();
     canvas.setPointerCapture(e.pointerId);
     drag = { id: e.pointerId, lastAngle: angleOf(e), samples: [{ t: e.timeStamp, rot: wheel.rotation }] };
@@ -127,6 +127,7 @@ export function initWheelInput(o: WheelInputOptions): void {
 
   window.addEventListener('keydown', (e) => {
     if (e.code !== 'Space' || isEditable(e.target)) return;
+    if (controller.blocked && !controller.spinning) return;
     // Space on other buttons keeps its normal meaning.
     if (e.target instanceof HTMLElement && e.target.closest('button, a, [role="button"], [role="switch"]') && e.target !== hub) return;
     e.preventDefault();

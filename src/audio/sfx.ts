@@ -100,6 +100,27 @@ class Sfx {
     src.stop(at + 0.55);
   }
 
+  /** Short two-note chime for each winner inside a batch draw. */
+  ding(): void {
+    const ctx = this.ready();
+    if (!ctx) return;
+    const at = ctx.currentTime + 0.01;
+    [783.99, 1174.66].forEach((f, i) => {
+      const t = at + i * 0.07;
+      for (const [mult, gain] of [
+        [1, 0.26],
+        [2.01, 0.07],
+      ] as const) {
+        const o = ctx.createOscillator();
+        o.type = 'sine';
+        o.frequency.value = f * mult;
+        o.connect(this.env(ctx, t, gain, 0.005, i ? 0.55 : 0.2));
+        o.start(t);
+        o.stop(t + 0.65);
+      }
+    });
+  }
+
   /** Reveal fanfare: rising major arpeggio with bell partials, then sparkles. */
   reveal(): void {
     const ctx = this.ready();

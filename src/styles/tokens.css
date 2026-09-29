@@ -7,6 +7,8 @@
   --red: #ea4335;
   --yellow: #fbbc04;
   --green: #34a853;
+  /* Yellow used for text: darker in light mode for contrast */
+  --yellow-text: #e37400;
 
   --radius-sm: 8px;
   --radius: 14px;
@@ -58,6 +60,8 @@
     --pointer-fill: #ffffff;
     --pointer-dot: #202124;
     --dim-color: rgb(2 3 8 / 0.7);
+  --yellow-text: var(--yellow);
+    --yellow-text: var(--yellow);
     color-scheme: dark;
   }
 }
@@ -79,5 +83,6 @@
   --pointer-fill: #ffffff;
   --pointer-dot: #202124;
   --dim-color: rgb(2 3 8 / 0.7);
+  --yellow-text: var(--yellow);
   color-scheme: dark;
 }
