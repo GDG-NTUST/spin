@@ -99,7 +99,18 @@ tests/           Vitest 單元測試
 
 ## Logo
 
-頁首的 logo 讀取 `public/logo.svg`。目前是佔位圖，請替換為官方素材，檔名保持不變即可。
+頁首使用 GDG on Campus NTUST 官方 logo，淺色主題顯示黑字版、深色主題顯示白字版：
+
+| 檔案 | 來源／用途 |
+|---|---|
+| `public/logo.svg` | `GDG_NTUST_Logo_Full.svg`（黑字） |
+| `public/logo-dark.svg` | `GDG_NTUST_Logo_Full_White_Word.svg`（白字） |
+| `public/favicon.svg` | 由 `logo.svg` 移除 NTUST 字樣、裁成正方形的圖形標誌 |
+| `public/favicon.ico` | 16／32／48 px |
+| `public/apple-touch-icon.png` | 180 px，白底（iOS 主畫面） |
+| `public/icon-192.png`、`icon-512.png`、`icon-maskable-512.png` | `site.webmanifest`（Android 加到主畫面） |
+
+favicon 只保留圖形，因為 NTUST 字樣在 16–32 px 下無法辨識。
 
 ## 深淺色
 

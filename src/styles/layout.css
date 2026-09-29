@@ -56,9 +56,25 @@ body {
 }
 
 .brand-logo {
-  height: 36px;
+  height: 52px;
   width: auto;
   display: block;
+  transition: transform var(--dur) var(--ease-spring);
+}
+.brand:hover .brand-logo { transform: scale(1.06) rotate(-3deg); }
+.brand:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; border-radius: 8px; }
+
+/* Black wordmark on light backgrounds, white wordmark on dark. */
+.brand-logo-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .brand-logo-light { display: none; }
+  :root:not([data-theme='light']) .brand-logo-dark { display: block; }
+}
+:root[data-theme='dark'] .brand-logo-light { display: none; }
+:root[data-theme='dark'] .brand-logo-dark { display: block; }
+
+@media (max-width: 480px) {
+  .brand-logo { height: 44px; }
 }
 
 .site-title {
