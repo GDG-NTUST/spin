@@ -30,8 +30,68 @@
 
     <main class="layout">
       <section class="panel panel-entries" aria-labelledby="entries-heading">
-        <h2 id="entries-heading" class="panel-title">名單</h2>
-        <p class="placeholder">名單管理（第 2 階段）</p>
+        <div class="panel-head">
+          <h2 id="entries-heading" class="panel-title">名單</h2>
+          <span class="count-badge"><span id="entry-count"></span><span class="count-unit">人</span></span>
+        </div>
+
+        <label class="field-label" for="entry-input">批次輸入</label>
+        <textarea
+          id="entry-input"
+          class="input textarea"
+          rows="5"
+          placeholder="貼上名單，可用換行、逗號、頓號、|、Tab 或分號分隔"
+          aria-describedby="entry-hint"
+        ></textarea>
+        <div class="row row-between">
+          <button id="entry-add" class="btn btn-primary" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            加入名單
+          </button>
+          <span id="entry-hint" class="hint"><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd></span>
+        </div>
+
+        <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-describedby="dropzone-hint">
+          <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+          <span class="dropzone-text">拖曳 CSV 到這裡，或<span class="dropzone-link">點擊選擇檔案</span></span>
+          <span id="dropzone-hint" class="hint">讀取「name / 姓名」欄，沒有則讀第一欄</span>
+          <input id="csv-input" type="file" accept=".csv,.txt,.tsv,text/csv,text/plain" hidden />
+        </div>
+
+        <div class="row row-between">
+          <div class="segmented" role="radiogroup" aria-label="匯入方式">
+            <span class="segmented-indicator" aria-hidden="true"></span>
+            <label><input type="radio" name="import-mode" value="append" /><span>附加</span></label>
+            <label><input type="radio" name="import-mode" value="replace" /><span>取代</span></label>
+          </div>
+          <label class="switch">
+            <input id="opt-dedupe" type="checkbox" role="switch" />
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            <span>移除重複</span>
+          </label>
+        </div>
+
+        <div class="list-toolbar">
+          <button id="export-entries" class="btn btn-ghost btn-sm" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"/></svg>
+            匯出名單
+          </button>
+          <button id="clear-entries" class="btn btn-ghost btn-sm btn-danger" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+            清空
+          </button>
+        </div>
+
+        <ul id="chip-list" class="chip-list" aria-label="目前名單"></ul>
+        <p id="entries-empty" class="empty-state">還沒有人，先貼上名單或匯入 CSV</p>
+
+        <div class="settings">
+          <label class="switch">
+            <input id="opt-remove-winner" type="checkbox" role="switch" />
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            <span>抽中後自動從獎池移除</span>
+          </label>
+        </div>
       </section>
 
       <section class="panel panel-wheel" aria-labelledby="wheel-heading">
@@ -44,8 +104,15 @@
       </section>
 
       <section class="panel panel-history" aria-labelledby="history-heading">
-        <h2 id="history-heading" class="panel-title">得獎紀錄</h2>
-        <p class="placeholder">尚無紀錄</p>
+        <div class="panel-head">
+          <h2 id="history-heading" class="panel-title">得獎紀錄</h2>
+          <button id="export-results" class="btn btn-ghost btn-sm" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"/></svg>
+            匯出結果
+          </button>
+        </div>
+        <ol id="history-list" class="history-list" reversed></ol>
+        <p id="history-empty" class="empty-state">尚無紀錄</p>
       </section>
     </main>
 

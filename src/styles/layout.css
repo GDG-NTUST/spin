@@ -6,6 +6,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -15,7 +16,7 @@ body {
   color: var(--text);
   background: var(--bg);
   line-height: 1.5;
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
 }
 
