@@ -4,7 +4,10 @@ import './styles/components.css';
 import './styles/entries.css';
 import './styles/wheel.css';
 import './styles/reveal.css';
+import './styles/background.css';
 import { sfx, unlockAudioOnGesture } from './audio/sfx';
+import { initBackground, initScrollReveal } from './fx/background';
+import { introPending, playIntro } from './fx/intro';
 import { loadState, persist } from './state/persist';
 import { createStore } from './state/store';
 import { DrawFlow } from './ui/drawFlow';
@@ -27,5 +30,22 @@ const announcer = document.querySelector<HTMLElement>('#announcer')!;
 const flow = new DrawFlow(store, announcer);
 const wheel = initWheel(store, flow.events());
 flow.attach(wheel);
+
+// Atmosphere, intro and scroll reveal.
+initBackground(document.querySelector<HTMLElement>('.bg')!);
+const revealTargets = '.panel:not(.panel-wheel), .site-footer';
+const startReveal = () => {
+  initScrollReveal(revealTargets);
+  document.documentElement.classList.remove('reveal-pending');
+};
+if (introPending()) {
+  void playIntro({
+    stage: document.querySelector<HTMLElement>('#wheel-stage')!,
+    wheelRadius: wheel.renderer.radius,
+    title: document.querySelector<HTMLElement>('.site-title')!,
+  }).then(startReveal);
+} else {
+  startReveal();
+}
 
 if (import.meta.env.DEV) Object.assign(window, { __spin: { store, wheel, sfx, flow } });

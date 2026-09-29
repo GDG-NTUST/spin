@@ -39,6 +39,10 @@
   --pointer-fill: #202124;
   --pointer-dot: #ffffff;
   --dim-color: rgb(18 20 28 / 0.42);
+  --shape-alpha: 0.7;
+  --sparkle-alpha: 0.55;
+  --beam-alpha: 0.5;
+  --beam-blend: soft-light;
   color-scheme: light;
 }
 
@@ -60,8 +64,11 @@
     --pointer-fill: #ffffff;
     --pointer-dot: #202124;
     --dim-color: rgb(2 3 8 / 0.7);
-  --yellow-text: var(--yellow);
     --yellow-text: var(--yellow);
+    --shape-alpha: 1;
+    --sparkle-alpha: 0.9;
+    --beam-alpha: 0.07;
+    --beam-blend: screen;
     color-scheme: dark;
   }
 }
@@ -84,5 +91,9 @@
   --pointer-dot: #202124;
   --dim-color: rgb(2 3 8 / 0.7);
   --yellow-text: var(--yellow);
+  --shape-alpha: 1;
+  --sparkle-alpha: 0.9;
+  --beam-alpha: 0.07;
+  --beam-blend: screen;
   color-scheme: dark;
 }

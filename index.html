@@ -8,11 +8,19 @@
     <title>Spin · GDG NTUST</title>
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
     <script>
-      // Apply saved theme before first paint to avoid a flash.
-      try {
-        var t = localStorage.getItem('spin:theme');
-        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-      } catch (e) {}
+      // Before first paint: apply the saved theme, and hide content that the
+      // intro / scroll-reveal will animate in (CSS has a failsafe timeout).
+      (function (root) {
+        try {
+          var t = localStorage.getItem('spin:theme');
+          if (t === 'light' || t === 'dark') root.dataset.theme = t;
+        } catch (e) {}
+        var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var played = false;
+        try { played = sessionStorage.getItem('spin:intro-played') === '1'; } catch (e) {}
+        if (!reduced) root.classList.add('reveal-pending');
+        if (!reduced && !played) root.classList.add('intro-pending');
+      })(document.documentElement);
     </script>
   </head>
   <body>
