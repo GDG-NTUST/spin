@@ -96,11 +96,30 @@
 
       <section class="panel panel-wheel" aria-labelledby="wheel-heading">
         <h2 id="wheel-heading" class="visually-hidden">輪盤</h2>
-        <div class="wheel-stage">
-          <div class="wheel-placeholder" aria-hidden="true">
-            <span></span><span></span><span></span><span></span>
+        <div id="wheel-stage" class="wheel-stage">
+          <svg class="charge-ring" viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <linearGradient id="charge-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#4285F4" />
+                <stop offset=".35" stop-color="#EA4335" />
+                <stop offset=".65" stop-color="#FBBC04" />
+                <stop offset="1" stop-color="#34A853" />
+              </linearGradient>
+            </defs>
+            <circle class="charge-track" cx="50" cy="50" r="48.6" />
+            <circle class="charge-arc" cx="50" cy="50" r="48.6" pathLength="1" />
+          </svg>
+          <canvas class="wheel-canvas" role="img" aria-label="抽獎輪盤"></canvas>
+          <div class="wheel-pointer" aria-hidden="true">
+            <svg viewBox="0 0 40 52"><path d="M20 50 3.5 14.5A18 18 0 1 1 36.5 14.5Z" /><circle cx="20" cy="17" r="6" /></svg>
           </div>
+          <div class="nameplate" hidden aria-hidden="true"><span class="nameplate-text"></span></div>
+          <button class="wheel-hub" type="button" aria-label="開始抽獎" aria-describedby="wheel-help">
+            <span class="hub-label hub-label-start">開始</span>
+            <span class="hub-label hub-label-stop">快停</span>
+          </button>
         </div>
+        <p id="wheel-help" class="wheel-help">點擊「開始」、甩動輪盤，或按住<kbd>空白鍵</kbd>蓄力後放開；轉動中再點一下即可快停</p>
       </section>
 
       <section class="panel panel-history" aria-labelledby="history-heading">
@@ -115,6 +134,8 @@
         <p id="history-empty" class="empty-state">尚無紀錄</p>
       </section>
     </main>
+
+    <div id="announcer" class="visually-hidden" aria-live="assertive" aria-atomic="true"></div>
 
     <footer class="site-footer">
       <p>GDG on Campus NTUST</p>

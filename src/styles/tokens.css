@@ -30,6 +30,12 @@
   --text-muted: #5f6368;
   --shadow: 0 10px 30px rgba(32, 33, 36, 0.08), 0 2px 6px rgba(32, 33, 36, 0.06);
   --glow-alpha: 0.18;
+  --wheel-rim: #2b2f3a;
+  --wheel-rim-shine: rgba(255, 255, 255, 0.22);
+  --wheel-peg: #ffffff;
+  --wheel-empty: rgba(32, 33, 36, 0.06);
+  --pointer-fill: #202124;
+  --pointer-dot: #ffffff;
   color-scheme: light;
 }
 
@@ -44,6 +50,12 @@
     --text-muted: #a0a6b1;
     --shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
     --glow-alpha: 0.32;
+    --wheel-rim: #e8eaed;
+    --wheel-rim-shine: rgba(255, 255, 255, 0.6);
+    --wheel-peg: #ffffff;
+    --wheel-empty: rgba(255, 255, 255, 0.05);
+    --pointer-fill: #ffffff;
+    --pointer-dot: #202124;
     color-scheme: dark;
   }
 }
@@ -58,5 +70,11 @@
   --text-muted: #a0a6b1;
   --shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
   --glow-alpha: 0.32;
+  --wheel-rim: #e8eaed;
+  --wheel-rim-shine: rgba(255, 255, 255, 0.6);
+  --wheel-peg: #ffffff;
+  --wheel-empty: rgba(255, 255, 255, 0.05);
+  --pointer-fill: #ffffff;
+  --pointer-dot: #202124;
   color-scheme: dark;
 }

@@ -44,28 +44,6 @@
   }
 }
 
-/* Temporary wheel placeholder: four-colour disc (real canvas wheel in stage 3) */
-.wheel-placeholder {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  box-shadow: var(--shadow);
-  animation: placeholder-spin 18s linear infinite;
-}
-
-.wheel-placeholder span:nth-child(1) { background: var(--blue); }
-.wheel-placeholder span:nth-child(2) { background: var(--red); }
-.wheel-placeholder span:nth-child(3) { background: var(--green); }
-.wheel-placeholder span:nth-child(4) { background: var(--yellow); }
-
-@keyframes placeholder-spin {
-  to { transform: rotate(360deg); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .wheel-placeholder { animation: none; }
   .icon-btn .icon-swap { animation: none; }
 }

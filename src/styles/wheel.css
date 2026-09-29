@@ -1,0 +1,178 @@
+.wheel-stage {
+  --charge: 0;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wheel-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.22));
+}
+.wheel-stage.is-dragging .wheel-canvas { cursor: grabbing; }
+.wheel-stage.is-spinning .wheel-canvas { cursor: pointer; }
+
+/* ── Pointer ─────────────────────────────────────────────── */
+.wheel-pointer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8.5%;
+  min-width: 30px;
+  translate: -50% 0;
+  transform-origin: 50% 33%;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+}
+.wheel-pointer svg { display: block; width: 100%; height: auto; }
+.wheel-pointer path { fill: var(--pointer-fill); }
+.wheel-pointer circle { fill: var(--pointer-dot); }
+
+/* ── Hub (start button) ──────────────────────────────────── */
+.wheel-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: 23%;
+  min-width: 72px;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text);
+  font: inherit;
+  font-weight: 900;
+  font-size: clamp(1rem, 2.6vw, 1.6rem);
+  letter-spacing: 0.08em;
+  background: conic-gradient(from -45deg, var(--blue) 0 25%, var(--red) 0 50%, var(--yellow) 0 75%, var(--green) 0);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.28),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 220ms var(--ease-spring),
+    box-shadow var(--dur) var(--ease-out),
+    filter var(--dur) var(--ease-out);
+}
+.wheel-hub::before {
+  /* inner face so the colour ring shows as a border */
+  content: '';
+  position: absolute;
+  inset: 7%;
+  border-radius: 50%;
+  background: var(--surface-strong);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.wheel-hub::after {
+  /* idle "tap me" pulse */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid var(--blue);
+  opacity: 0;
+  animation: hub-pulse 2s var(--ease-out) infinite;
+  pointer-events: none;
+}
+.hub-label { position: relative; grid-area: 1 / 1; transition: opacity 180ms, transform 260ms var(--ease-spring); }
+.hub-label-stop { opacity: 0; transform: scale(0.6); color: var(--red); }
+
+.wheel-hub:hover { transform: scale(1.06); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32), inset 0 -4px 10px rgba(0, 0, 0, 0.12); }
+.wheel-hub:active { transform: scale(0.92); transition-duration: 80ms; }
+.wheel-hub:focus-visible { outline: 4px solid var(--blue); outline-offset: 4px; }
+
+@keyframes hub-pulse {
+  0% { opacity: 0.7; transform: scale(1); }
+  70%, 100% { opacity: 0; transform: scale(1.45); }
+}
+
+.wheel-stage.is-spinning .wheel-hub::after,
+.wheel-stage.is-empty .wheel-hub::after,
+.wheel-stage.is-charging .wheel-hub::after { animation: none; opacity: 0; }
+.wheel-stage.is-spinning .hub-label-start { opacity: 0; transform: scale(0.6); }
+.wheel-stage.is-spinning .hub-label-stop { opacity: 1; transform: none; }
+.wheel-stage.is-empty .wheel-hub { filter: grayscale(0.85) opacity(0.75); }
+.wheel-hub.is-error { animation: hub-error 600ms var(--ease-out); }
+@keyframes hub-error {
+  30% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--red) 40%, transparent); }
+}
+
+/* Charging: hub compresses, ring fills */
+.wheel-stage.is-charging .wheel-hub {
+  transform: scale(calc(1 - var(--charge) * 0.14));
+  transition-duration: 60ms;
+}
+.wheel-stage.is-charged .wheel-hub { animation: hub-ready 280ms ease-in-out infinite alternate; }
+@keyframes hub-ready {
+  to { box-shadow: 0 0 0 10px color-mix(in srgb, var(--yellow) 45%, transparent), 0 10px 28px rgba(0, 0, 0, 0.28); }
+}
+
+/* ── Charge ring ─────────────────────────────────────────── */
+.charge-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  rotate: -90deg;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms var(--ease-out);
+}
+.wheel-stage.is-charging .charge-ring { opacity: 1; }
+.charge-track { fill: none; stroke: color-mix(in srgb, var(--text) 10%, transparent); stroke-width: 1.4; }
+.charge-arc {
+  fill: none;
+  stroke: url(#charge-grad);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 1.5px rgba(251, 188, 4, 0.9));
+}
+
+/* ── Name tag next to the pointer ────────────────────────── */
+.nameplate {
+  position: absolute;
+  top: 1.5%;
+  left: calc(50% + max(22px, 5.5%));
+  z-index: 2;
+  max-width: 44%;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  font-weight: 800;
+  font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: fade-up 300ms var(--ease-out);
+}
+.nameplate[hidden] { display: none; }
+.nameplate-text:empty::before { content: '—'; color: var(--text-muted); }
+
+.wheel-help {
+  margin: 14px auto 0;
+  max-width: 34em;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.wheel-help kbd { margin: 0 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-hub::after { animation: none; }
+  .wheel-stage.is-charged .wheel-hub { animation: none; }
+}
